@@ -4,45 +4,54 @@ enum SnackType { success, info, warning, error }
 
 void showAppSnack(BuildContext context, String message, {SnackType type = SnackType.info, String? actionLabel, VoidCallback? onAction}) {
   final cs = Theme.of(context).colorScheme;
+  final snack = buildAppSnack(cs, message, type: type, actionLabel: actionLabel, onAction: onAction);
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(snack);
+}
+
+SnackBar buildAppSnack(ColorScheme cs, String message, {SnackType type = SnackType.info, String? actionLabel, VoidCallback? onAction}) {
   Color bg;
+  Color fg;
   IconData icon;
   switch (type) {
     case SnackType.success:
       bg = cs.primary.withValues(alpha: 0.90);
+      fg = cs.onPrimary;
       icon = Icons.check_circle_rounded;
       break;
     case SnackType.warning:
       bg = cs.secondary.withValues(alpha: 0.90);
+      fg = cs.onPrimary;
       icon = Icons.warning_amber_rounded;
       break;
     case SnackType.error:
       bg = cs.error.withValues(alpha: 0.90);
+      fg = cs.onPrimary;
       icon = Icons.error_rounded;
       break;
     case SnackType.info:
       bg = cs.inverseSurface.withValues(alpha: 0.95);
+      fg = cs.onInverseSurface;
       icon = Icons.info_rounded;
   }
 
-  final snack = SnackBar(
+  return SnackBar(
     behavior: SnackBarBehavior.floating,
     backgroundColor: bg,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     content: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, color: cs.onPrimary, size: 20),
+        Icon(icon, color: fg, size: 20),
         const SizedBox(width: 10),
-        Expanded(child: Text(message, style: TextStyle(color: cs.onPrimary))),
+        Expanded(child: Text(message, style: TextStyle(color: fg))),
       ],
     ),
     action: (actionLabel != null && onAction != null)
-        ? SnackBarAction(label: actionLabel, onPressed: onAction, textColor: cs.onPrimary)
+        ? SnackBarAction(label: actionLabel, onPressed: onAction, textColor: fg)
         : null,
     duration: const Duration(seconds: 3),
   );
-  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  ScaffoldMessenger.of(context).showSnackBar(snack);
 }
 
 Future<bool> confirm(BuildContext context, {required String title, required String message, String confirmText = 'Confirmer', String cancelText = 'Annuler', bool danger = false}) async {

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../models/category.dart';
 import '../../providers.dart';
+import '../../utils/overlays.dart';
 
 class CategoryFormScreen extends ConsumerStatefulWidget {
   final Category? category;
@@ -52,6 +53,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     setState(() => _saving = true);
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
+    final cs = Theme.of(context).colorScheme;
     try {
       final service = ref.read(categoryServiceProvider);
       final category = Category(
@@ -62,15 +64,15 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       );
       if (widget.category == null) {
         await service.create(category);
-        messenger.showSnackBar(const SnackBar(content: Text('Catégorie ajoutée')));
+        messenger.showSnackBar(buildAppSnack(cs, 'Catégorie ajoutée', type: SnackType.success));
       } else {
         await service.update(category);
-        messenger.showSnackBar(const SnackBar(content: Text('Catégorie modifiée')));
+        messenger.showSnackBar(buildAppSnack(cs, 'Catégorie modifiée', type: SnackType.success));
       }
       ref.invalidate(categoriesWithCountProvider);
       if (navigator.canPop()) navigator.pop(true);
     } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text('Erreur: $e')));
+      messenger.showSnackBar(buildAppSnack(cs, 'Erreur: $e', type: SnackType.error));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -88,21 +90,14 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               icon: const Icon(Icons.delete_outline),
               onPressed: () async {
                 final navigator = Navigator.of(context);
-                final ok = await showDialog<bool>(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text('Supprimer'),
-                    content: const Text('Confirmer la suppression de cette catégorie ?'),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
-                      FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Supprimer')),
-                    ],
-                  ),
-                );
+                final messenger = ScaffoldMessenger.of(context);
+                final cs = Theme.of(context).colorScheme;
+                final ok = await confirm(context, title: 'Supprimer', message: 'Confirmer la suppression de cette catégorie ?', danger: true);
                 if (ok == true) {
                   final service = ref.read(categoryServiceProvider);
                   await service.delete(widget.category!.id!);
                   ref.invalidate(categoriesWithCountProvider);
+                  messenger.showSnackBar(buildAppSnack(cs, 'Catégorie supprimée', type: SnackType.success));
                   if (navigator.canPop()) navigator.pop(true);
                 }
               },

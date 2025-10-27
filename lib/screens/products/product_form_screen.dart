@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../models/product.dart';
 import '../../models/category.dart';
 import '../../providers.dart';
+import '../../utils/overlays.dart';
 
 class ProductFormScreen extends ConsumerStatefulWidget {
   final int categoryId;
@@ -58,12 +59,13 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedCategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Veuillez choisir une catégorie')));
+      showAppSnack(context, 'Veuillez choisir une catégorie', type: SnackType.warning);
       return;
     }
     setState(() => _saving = true);
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
+    final cs = Theme.of(context).colorScheme;
     try {
       final service = ref.read(productServiceProvider);
       final product = Product(
@@ -76,16 +78,16 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
       );
       if (widget.product == null) {
         await service.create(product);
-        messenger.showSnackBar(const SnackBar(content: Text('Produit ajouté')));
+        messenger.showSnackBar(buildAppSnack(cs, 'Produit ajouté', type: SnackType.success));
       } else {
         await service.update(product);
-        messenger.showSnackBar(const SnackBar(content: Text('Produit modifié')));
+        messenger.showSnackBar(buildAppSnack(cs, 'Produit modifié', type: SnackType.success));
       }
       ref.invalidate(productsByCategoryProvider(_selectedCategoryId!));
       ref.invalidate(categoriesWithCountProvider);
       if (navigator.canPop()) navigator.pop(true);
     } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text('Erreur: $e')));
+      messenger.showSnackBar(buildAppSnack(cs, 'Erreur: $e', type: SnackType.error));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -104,22 +106,15 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
               icon: const Icon(Icons.delete_outline),
               onPressed: () async {
                 final navigator = Navigator.of(context);
-                final ok = await showDialog<bool>(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text('Supprimer'),
-                    content: const Text('Confirmer la suppression de ce produit ?'),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
-                      FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Supprimer')),
-                    ],
-                  ),
-                );
+                final messenger = ScaffoldMessenger.of(context);
+                final cs = Theme.of(context).colorScheme;
+                final ok = await confirm(context, title: 'Supprimer', message: 'Confirmer la suppression de ce produit ?', danger: true);
                 if (ok == true) {
                   final service = ref.read(productServiceProvider);
                   await service.delete(widget.product!.id!);
                   ref.invalidate(productsByCategoryProvider(widget.product!.categoryId));
                   ref.invalidate(categoriesWithCountProvider);
+                  messenger.showSnackBar(buildAppSnack(cs, 'Produit supprimé', type: SnackType.success));
                   if (navigator.canPop()) navigator.pop(true);
                 }
               },

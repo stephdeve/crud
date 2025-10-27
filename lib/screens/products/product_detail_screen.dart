@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers.dart';
 import '../../utils/format.dart';
 import 'product_form_screen.dart';
+import '../../utils/overlays.dart';
+import '../../utils/navigation.dart' as nav;
 
 class ProductDetailScreen extends ConsumerWidget {
   final int productId;
@@ -27,10 +29,9 @@ class ProductDetailScreen extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.edit_outlined),
                 onPressed: () async {
-                  final updated = await Navigator.of(context).push<bool>(
-                    MaterialPageRoute(
-                      builder: (_) => ProductFormScreen(categoryId: p.categoryId, product: p),
-                    ),
+                  final updated = await nav.push<bool>(
+                    context,
+                    ProductFormScreen(categoryId: p.categoryId, product: p),
                   );
                   if (updated == true) {
                     ref.invalidate(productByIdProvider(productId));
@@ -42,25 +43,12 @@ class ProductDetailScreen extends ConsumerWidget {
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () async {
                   final navigator = Navigator.of(context);
-                  final ok = await showDialog<bool>(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: const Text('Supprimer'),
-                      content: const Text('Confirmer la suppression de ce produit ?'),
-                      actions: [
-                        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
-                        FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Supprimer')),
-                      ],
-                    ),
-                  );
+                  final ok = await confirm(context, title: 'Supprimer', message: 'Confirmer la suppression de ce produit ?', danger: true);
                   if (ok == true) {
                     final service = ref.read(productServiceProvider);
                     await service.delete(p.id!);
                     ref.invalidate(productsByCategoryProvider(p.categoryId));
-                    // Pop back to the list after delete.
-                    if (navigator.canPop()) {
-                      navigator.pop(true);
-                    }
+                    if (navigator.canPop()) navigator.pop(true);
                   }
                 },
               ),

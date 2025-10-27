@@ -5,6 +5,9 @@ import '../../providers.dart';
 import '../../widgets/product_card.dart';
 import 'product_form_screen.dart';
 import 'product_detail_screen.dart';
+import '../../utils/navigation.dart' as nav;
+import '../../utils/animations.dart';
+import '../../utils/overlays.dart';
 
 class ProductsScreen extends ConsumerWidget {
   final int categoryId;
@@ -21,11 +24,7 @@ class ProductsScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
-              final created = await Navigator.of(context).push<bool>(
-                MaterialPageRoute(
-                  builder: (_) => ProductFormScreen(categoryId: categoryId),
-                ),
-              );
+              final created = await nav.push<bool>(context, ProductFormScreen(categoryId: categoryId));
               if (created == true) {
                 ref.invalidate(productsByCategoryProvider(categoryId));
               }
@@ -35,11 +34,7 @@ class ProductsScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final created = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(
-              builder: (_) => ProductFormScreen(categoryId: categoryId),
-            ),
-          );
+          final created = await nav.push<bool>(context, ProductFormScreen(categoryId: categoryId));
           if (created == true) {
             ref.invalidate(productsByCategoryProvider(categoryId));
           }
@@ -79,17 +74,23 @@ class ProductsScreen extends ConsumerWidget {
                     return ListView.separated(
                       itemBuilder: (context, index) {
                         final p = items[index];
-                        return ProductCard(
-                          id: p.id,
-                          title: p.name,
-                          price: p.price,
-                          image: p.image,
-                          onTap: () async {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => ProductDetailScreen(productId: p.id!)),
-                            );
-                            ref.invalidate(productsByCategoryProvider(categoryId));
-                          },
+                        return FadeSlideIn(
+                          index: index,
+                          child: ProductCard(
+                            id: p.id,
+                            title: p.name,
+                            price: p.price,
+                            image: p.image,
+                            onTap: () async {
+                              final messenger = ScaffoldMessenger.of(context);
+                              final cs = Theme.of(context).colorScheme;
+                              final deleted = await nav.push<bool>(context, ProductDetailScreen(productId: p.id!));
+                              ref.invalidate(productsByCategoryProvider(categoryId));
+                              if (deleted == true) {
+                                messenger.showSnackBar(buildAppSnack(cs, 'Produit supprimé', type: SnackType.success));
+                              }
+                            },
+                          ),
                         );
                       },
                       separatorBuilder: (_, __) => const SizedBox(height: 12),
