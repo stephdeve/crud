@@ -50,9 +50,9 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
     try {
-      final navigator = Navigator.of(context);
-      final messenger = ScaffoldMessenger.of(context);
       final service = ref.read(categoryServiceProvider);
       final category = Category(
         id: widget.category?.id,
@@ -70,7 +70,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       ref.invalidate(categoriesWithCountProvider);
       if (navigator.canPop()) navigator.pop(true);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
+      messenger.showSnackBar(SnackBar(content: Text('Erreur: $e')));
     } finally {
       if (mounted) setState(() => _saving = false);
     }

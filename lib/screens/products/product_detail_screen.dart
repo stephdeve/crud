@@ -41,6 +41,7 @@ class ProductDetailScreen extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () async {
+                  final navigator = Navigator.of(context);
                   final ok = await showDialog<bool>(
                     context: context,
                     builder: (ctx) => AlertDialog(
@@ -57,8 +58,8 @@ class ProductDetailScreen extends ConsumerWidget {
                     await service.delete(p.id!);
                     ref.invalidate(productsByCategoryProvider(p.categoryId));
                     // Pop back to the list after delete.
-                    if (Navigator.canPop(context)) {
-                      Navigator.of(context).pop(true);
+                    if (navigator.canPop()) {
+                      navigator.pop(true);
                     }
                   }
                 },

@@ -5,6 +5,8 @@ import '../../providers.dart';
 import '../../widgets/category_card.dart';
 import 'category_form_screen.dart';
 import '../products/products_screen.dart';
+import '../../utils/navigation.dart' as nav;
+import '../../utils/animations.dart';
 
 class CategoriesScreen extends ConsumerWidget {
   const CategoriesScreen({super.key});
@@ -19,9 +21,7 @@ class CategoriesScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
-              final created = await Navigator.of(context).push<bool>(
-                MaterialPageRoute(builder: (_) => const CategoryFormScreen()),
-              );
+              final created = await nav.push<bool>(context, const CategoryFormScreen());
               if (created == true) {
                 ref.invalidate(categoriesWithCountProvider);
               }
@@ -71,31 +71,32 @@ class CategoriesScreen extends ConsumerWidget {
                       itemCount: items.length,
                       itemBuilder: (context, index) {
                         final item = items[index];
-                        return CategoryCard(
-                          title: item.category.name,
-                          image: item.category.image,
-                          productCount: item.productCount,
-                          onTap: () {
-                            if (item.category.id == null) return;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ProductsScreen(
+                        return FadeSlideIn(
+                          index: index,
+                          child: CategoryCard(
+                            title: item.category.name,
+                            image: item.category.image,
+                            productCount: item.productCount,
+                            onTap: () {
+                              if (item.category.id == null) return;
+                              nav.push(
+                                context,
+                                ProductsScreen(
                                   categoryId: item.category.id!,
                                   categoryName: item.category.name,
                                 ),
-                              ),
-                            );
-                          },
-                          onLongPress: () async {
-                            final updated = await Navigator.of(context).push<bool>(
-                              MaterialPageRoute(
-                                builder: (_) => CategoryFormScreen(category: item.category),
-                              ),
-                            );
-                            if (updated == true) {
-                              ref.invalidate(categoriesWithCountProvider);
-                            }
-                          },
+                              );
+                            },
+                            onLongPress: () async {
+                              final updated = await nav.push<bool>(
+                                context,
+                                CategoryFormScreen(category: item.category),
+                              );
+                              if (updated == true) {
+                                ref.invalidate(categoriesWithCountProvider);
+                              }
+                            },
+                          ),
                         );
                       },
                     );

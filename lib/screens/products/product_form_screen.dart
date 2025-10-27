@@ -62,6 +62,8 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
       return;
     }
     setState(() => _saving = true);
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
     try {
       final service = ref.read(productServiceProvider);
       final product = Product(
@@ -74,20 +76,16 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
       );
       if (widget.product == null) {
         await service.create(product);
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Produit ajouté')));
+        messenger.showSnackBar(const SnackBar(content: Text('Produit ajouté')));
       } else {
         await service.update(product);
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Produit modifié')));
+        messenger.showSnackBar(const SnackBar(content: Text('Produit modifié')));
       }
       ref.invalidate(productsByCategoryProvider(_selectedCategoryId!));
-      if (!mounted) return;
-      Navigator.of(context).pop(true);
+      ref.invalidate(categoriesWithCountProvider);
+      if (navigator.canPop()) navigator.pop(true);
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
-      }
+      messenger.showSnackBar(SnackBar(content: Text('Erreur: $e')));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -105,6 +103,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 final ok = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
@@ -120,8 +119,8 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   final service = ref.read(productServiceProvider);
                   await service.delete(widget.product!.id!);
                   ref.invalidate(productsByCategoryProvider(widget.product!.categoryId));
-                  if (!mounted) return;
-                  Navigator.of(context).pop(true);
+                  ref.invalidate(categoriesWithCountProvider);
+                  if (navigator.canPop()) navigator.pop(true);
                 }
               },
             )
