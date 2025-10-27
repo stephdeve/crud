@@ -57,7 +57,9 @@ class ProductDetailScreen extends ConsumerWidget {
                     await service.delete(p.id!);
                     ref.invalidate(productsByCategoryProvider(p.categoryId));
                     // Pop back to the list after delete.
-                    if (context.mounted) Navigator.of(context).pop(true);
+                    if (Navigator.canPop(context)) {
+                      Navigator.of(context).pop(true);
+                    }
                   }
                 },
               ),
@@ -70,7 +72,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 child: AspectRatio(
                   aspectRatio: 1.2,
                   child: Container(
-                    color: color.primary.withOpacity(0.06),
+                    color: color.primary.withValues(alpha: 0.06),
                     child: p.image != null && p.image!.isNotEmpty
                         ? Image.file(File(p.image!), fit: BoxFit.cover)
                         : Icon(Icons.image_outlined, color: color.primary, size: 64),

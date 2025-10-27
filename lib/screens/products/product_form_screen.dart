@@ -74,17 +74,16 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
       );
       if (widget.product == null) {
         await service.create(product);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Produit ajouté')));
-        }
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Produit ajouté')));
       } else {
         await service.update(product);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Produit modifié')));
-        }
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Produit modifié')));
       }
       ref.invalidate(productsByCategoryProvider(_selectedCategoryId!));
-      if (mounted) Navigator.of(context).pop(true);
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
@@ -121,7 +120,8 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   final service = ref.read(productServiceProvider);
                   await service.delete(widget.product!.id!);
                   ref.invalidate(productsByCategoryProvider(widget.product!.categoryId));
-                  if (mounted) Navigator.of(context).pop(true);
+                  if (!mounted) return;
+                  Navigator.of(context).pop(true);
                 }
               },
             )
@@ -137,7 +137,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 onTap: _pickImage,
                 child: CircleAvatar(
                   radius: 48,
-                  backgroundColor: color.primary.withOpacity(0.1),
+                  backgroundColor: color.primary.withValues(alpha: 0.1),
                   backgroundImage: _imagePath != null ? FileImage(File(_imagePath!)) : null,
                   child: _imagePath == null ? Icon(Icons.add_a_photo, color: color.primary) : null,
                 ),
@@ -176,7 +176,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
               error: (e, _) => Text('Erreur de catégories: $e'),
               data: (cats) {
                 return DropdownButtonFormField<int>(
-                  value: _selectedCategoryId,
+                  initialValue: _selectedCategoryId,
                   items: cats
                       .map((Category c) => DropdownMenuItem<int>(
                             value: c.id,

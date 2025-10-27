@@ -51,6 +51,8 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {
+      final navigator = Navigator.of(context);
+      final messenger = ScaffoldMessenger.of(context);
       final service = ref.read(categoryServiceProvider);
       final category = Category(
         id: widget.category?.id,
@@ -60,21 +62,15 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       );
       if (widget.category == null) {
         await service.create(category);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catégorie ajoutée')));
-        }
+        messenger.showSnackBar(const SnackBar(content: Text('Catégorie ajoutée')));
       } else {
         await service.update(category);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catégorie modifiée')));
-        }
+        messenger.showSnackBar(const SnackBar(content: Text('Catégorie modifiée')));
       }
       ref.invalidate(categoriesWithCountProvider);
-      if (mounted) Navigator.of(context).pop(true);
+      if (navigator.canPop()) navigator.pop(true);
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
-      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -91,6 +87,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
             IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 final ok = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
@@ -106,7 +103,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                   final service = ref.read(categoryServiceProvider);
                   await service.delete(widget.category!.id!);
                   ref.invalidate(categoriesWithCountProvider);
-                  if (mounted) Navigator.of(context).pop(true);
+                  if (navigator.canPop()) navigator.pop(true);
                 }
               },
             ),
@@ -122,7 +119,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 onTap: _pickImage,
                 child: CircleAvatar(
                   radius: 48,
-                  backgroundColor: color.primary.withOpacity(0.1),
+                  backgroundColor: color.primary.withValues(alpha: 0.1),
                   backgroundImage: _imagePath != null ? FileImage(File(_imagePath!)) : null,
                   child: _imagePath == null ? Icon(Icons.add_a_photo, color: color.primary) : null,
                 ),
