@@ -18,6 +18,9 @@ class CategoriesScreen extends ConsumerWidget {
     final asyncCategories = ref.watch(categoriesWithCountProvider);
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        centerTitle: false,
         title: const Text('Catégories'),
         actions: [
           IconButton(

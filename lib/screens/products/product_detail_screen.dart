@@ -24,6 +24,8 @@ class ProductDetailScreen extends ConsumerWidget {
         final color = Theme.of(context).colorScheme;
         return Scaffold(
           appBar: AppBar(
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             title: Text(p.name),
             actions: [
               IconButton(
