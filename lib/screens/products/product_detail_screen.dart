@@ -82,6 +82,20 @@ class ProductDetailScreen extends ConsumerWidget {
                       formatPrice(p.price),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(color: color.primary, fontWeight: FontWeight.w700),
                     ),
+                    const SizedBox(height: 12),
+                    if ((p.createdByName ?? '').isNotEmpty || (p.createdAt ?? '').isNotEmpty)
+                      Text(
+                        'Par ${p.createdByName ?? '-'} • ${p.createdAt != null ? DateTime.tryParse(p.createdAt!) != null ? 'Créé ${DateTime.tryParse(p.createdAt!)!.day.toString().padLeft(2, '0')}/${DateTime.tryParse(p.createdAt!)!.month.toString().padLeft(2, '0')}/${DateTime.tryParse(p.createdAt!)!.year} ${DateTime.tryParse(p.createdAt!)!.hour.toString().padLeft(2, '0')}:${DateTime.tryParse(p.createdAt!)!.minute.toString().padLeft(2, '0')}' : '' : ''}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    if ((p.updatedByName ?? '').isNotEmpty || (p.updatedAt ?? '').isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          'MAJ ${p.updatedAt != null ? DateTime.tryParse(p.updatedAt!) != null ? '${DateTime.tryParse(p.updatedAt!)!.day.toString().padLeft(2, '0')}/${DateTime.tryParse(p.updatedAt!)!.month.toString().padLeft(2, '0')}/${DateTime.tryParse(p.updatedAt!)!.year} ${DateTime.tryParse(p.updatedAt!)!.hour.toString().padLeft(2, '0')}:${DateTime.tryParse(p.updatedAt!)!.minute.toString().padLeft(2, '0')}' : '' : ''} par ${p.updatedByName ?? '-'}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
                     const SizedBox(height: 16),
                     Text(p.description, style: Theme.of(context).textTheme.bodyLarge),
                     const SizedBox(height: 16),

@@ -1,13 +1,26 @@
 import '../models/product.dart';
 import 'db_service.dart';
+import 'auth_service.dart';
 
 class ProductService {
   final DBService _dbService;
-  ProductService(this._dbService);
+  final AuthService _auth;
+  ProductService(this._dbService, this._auth);
 
   Future<int> create(Product product) async {
     final db = await _dbService.database;
-    return db.insert('products', product.toMap());
+    final user = await _auth.getCurrentUser();
+    final now = DateTime.now().toIso8601String();
+    final data = product
+        .copyWith(
+          createdAt: now,
+          updatedAt: now,
+          createdBy: user?.id,
+          updatedBy: user?.id,
+        )
+        .toMap();
+    data.remove('id');
+    return db.insert('products', data);
   }
 
   Future<List<Product>> getAll({String search = '', int? categoryId}) async {
@@ -17,37 +30,60 @@ class ProductService {
     final whereArgs = <Object?>[];
 
     if (search.isNotEmpty) {
-      whereClauses.add('(name LIKE ? OR IFNULL(description, "") LIKE ?)');
+      whereClauses.add('(pr.name LIKE ? OR IFNULL(pr.description, "") LIKE ?)');
       whereArgs.addAll([like, like]);
     }
     if (categoryId != null) {
-      whereClauses.add('category_id = ?');
+      whereClauses.add('pr.category_id = ?');
       whereArgs.add(categoryId);
     }
 
-    final rows = await db.query(
-      'products',
-      where: whereClauses.isEmpty ? null : whereClauses.join(' AND '),
-      whereArgs: whereArgs.isEmpty ? null : whereArgs,
-      orderBy: 'name ASC',
-    );
+    final rows = await db.rawQuery('''
+      SELECT pr.*, uc.name AS created_by_name, uu.name AS updated_by_name
+      FROM products pr
+      LEFT JOIN users uc ON uc.id = pr.created_by
+      LEFT JOIN users uu ON uu.id = pr.updated_by
+      ${whereClauses.isEmpty ? '' : 'WHERE ' + whereClauses.join(' AND ')}
+      ORDER BY pr.name ASC
+    ''', whereArgs.isEmpty ? [] : whereArgs);
     return rows.map((e) => Product.fromMap(e)).toList();
   }
 
   Future<Product?> getById(int id) async {
     final db = await _dbService.database;
-    final rows = await db.query('products', where: 'id = ?', whereArgs: [id], limit: 1);
+    final rows = await db.rawQuery('''
+      SELECT pr.*, uc.name AS created_by_name, uu.name AS updated_by_name
+      FROM products pr
+      LEFT JOIN users uc ON uc.id = pr.created_by
+      LEFT JOIN users uu ON uu.id = pr.updated_by
+      WHERE pr.id = ?
+      LIMIT 1
+    ''', [id]);
     if (rows.isEmpty) return null;
     return Product.fromMap(rows.first);
   }
 
   Future<int> update(Product product) async {
     final db = await _dbService.database;
-    return db.update('products', product.toMap(), where: 'id = ?', whereArgs: [product.id]);
+    final user = await _auth.getCurrentUser();
+    if (user == null) throw Exception('Non authentifié');
+    final now = DateTime.now().toIso8601String();
+    final data = {
+      'name': product.name,
+      'description': product.description,
+      'price': product.price,
+      'image': product.image,
+      'category_id': product.categoryId,
+      'updated_at': now,
+      'updated_by': user.id,
+    };
+    return db.update('products', data, where: 'id = ?', whereArgs: [product.id]);
   }
 
   Future<int> delete(int id) async {
     final db = await _dbService.database;
+    final user = await _auth.getCurrentUser();
+    if (user == null) throw Exception('Non authentifié');
     return db.delete('products', where: 'id = ?', whereArgs: [id]);
   }
 }

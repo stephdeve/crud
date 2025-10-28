@@ -7,6 +7,8 @@ import 'category_form_screen.dart';
 import '../products/products_screen.dart';
 import '../../utils/navigation.dart' as nav;
 import '../../utils/animations.dart';
+import '../../utils/format.dart';
+import '../../models/category_with_count.dart';
 
 class CategoriesScreen extends ConsumerWidget {
   const CategoriesScreen({super.key});
@@ -18,6 +20,13 @@ class CategoriesScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Catégories'),
         actions: [
+          IconButton(
+            tooltip: 'Se déconnecter',
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await ref.read(authServiceProvider).signOut();
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
@@ -77,6 +86,7 @@ class CategoriesScreen extends ConsumerWidget {
                             title: item.category.name,
                             image: item.category.image,
                             productCount: item.productCount,
+                            meta: _buildCategoryMeta(item),
                             onTap: () {
                               if (item.category.id == null) return;
                               nav.push(
@@ -108,5 +118,17 @@ class CategoriesScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String _buildCategoryMeta(CategoryWithCount item) {
+    final c = item.category;
+    final creator = c.createdByName ?? '-';
+    final created = formatDateTime(c.createdAt);
+    final updated = formatDateTime(c.updatedAt);
+    final updBy = c.updatedByName ?? '-';
+    final parts = <String>['par $creator'];
+    if (created.isNotEmpty) parts.add('créé $created');
+    if (updated.isNotEmpty) parts.add('MAJ $updated par $updBy');
+    return parts.join(' • ');
   }
 }

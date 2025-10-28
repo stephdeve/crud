@@ -19,20 +19,50 @@ class DBService {
 
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
       },
       onCreate: (db, version) async {
+        // Users table
+        await db.execute('''
+        CREATE TABLE users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          email TEXT NOT NULL UNIQUE,
+          password_hash TEXT NOT NULL,
+          salt TEXT NOT NULL,
+          created_at TEXT NOT NULL
+        );
+        ''');
+
+        // Session holder for audit triggers
+        await db.execute('''
+        CREATE TABLE app_session (
+          id INTEGER PRIMARY KEY CHECK (id = 1),
+          current_user_id INTEGER,
+          FOREIGN KEY (current_user_id) REFERENCES users(id)
+        );
+        ''');
+        await db.insert('app_session', {'id': 1, 'current_user_id': null});
+
+        // Categories with audit columns
         await db.execute('''
         CREATE TABLE categories (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
           description TEXT,
-          image TEXT
+          image TEXT,
+          created_at TEXT,
+          created_by INTEGER,
+          updated_at TEXT,
+          updated_by INTEGER,
+          FOREIGN KEY (created_by) REFERENCES users(id),
+          FOREIGN KEY (updated_by) REFERENCES users(id)
         );
         ''');
 
+        // Products with audit columns
         await db.execute('''
         CREATE TABLE products (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,12 +71,61 @@ class DBService {
           price REAL NOT NULL,
           image TEXT,
           category_id INTEGER NOT NULL,
-          FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+          created_at TEXT,
+          created_by INTEGER,
+          updated_at TEXT,
+          updated_by INTEGER,
+          FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+          FOREIGN KEY (created_by) REFERENCES users(id),
+          FOREIGN KEY (updated_by) REFERENCES users(id)
         );
         ''');
+
+        // Audit fields are set from application code in services.
       },
       onOpen: (db) async {
         await _seedIfEmpty(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Create users and session if not exist
+          await db.execute('''
+          CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            salt TEXT NOT NULL,
+            created_at TEXT NOT NULL
+          );
+          ''');
+
+          await db.execute('''
+          CREATE TABLE IF NOT EXISTS app_session (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            current_user_id INTEGER,
+            FOREIGN KEY (current_user_id) REFERENCES users(id)
+          );
+          ''');
+          final existing = await db.query('app_session', limit: 1);
+          if (existing.isEmpty) {
+            await db.insert('app_session', {'id': 1, 'current_user_id': null});
+          }
+
+          // Add audit columns to categories
+          await db.execute('ALTER TABLE categories ADD COLUMN created_at TEXT');
+          await db.execute('ALTER TABLE categories ADD COLUMN created_by INTEGER');
+          await db.execute('ALTER TABLE categories ADD COLUMN updated_at TEXT');
+          await db.execute('ALTER TABLE categories ADD COLUMN updated_by INTEGER');
+
+          // Add audit columns to products
+          await db.execute('ALTER TABLE products ADD COLUMN created_at TEXT');
+          await db.execute('ALTER TABLE products ADD COLUMN created_by INTEGER');
+          await db.execute('ALTER TABLE products ADD COLUMN updated_at TEXT');
+          await db.execute('ALTER TABLE products ADD COLUMN updated_by INTEGER');
+
+          // Audit fields are set from application code in services.
+        }
       },
     );
   }
@@ -115,4 +194,6 @@ class DBService {
       'category_id': catId4,
     });
   }
+
+  
 }

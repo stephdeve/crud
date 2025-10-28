@@ -7,6 +7,7 @@ class CategoryCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onEdit;
   final VoidCallback? onLongPress;
+  final String? meta;
 
   const CategoryCard({
     super.key,
@@ -16,6 +17,7 @@ class CategoryCard extends StatelessWidget {
     this.onTap,
     this.onEdit,
     this.onLongPress,
+    this.meta,
   });
 
   @override
@@ -60,6 +62,10 @@ class CategoryCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text('$productCount produit${productCount > 1 ? 's' : ''}', style: Theme.of(context).textTheme.bodySmall),
+              if (meta != null && meta!.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(meta!, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.black.withValues(alpha: 0.6))),
+              ]
             ],
           ),
         ),

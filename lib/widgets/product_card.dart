@@ -9,6 +9,7 @@ class ProductCard extends StatelessWidget {
   final double price;
   final String? image;
   final VoidCallback? onTap;
+  final String? meta;
 
   const ProductCard({
     super.key,
@@ -17,6 +18,7 @@ class ProductCard extends StatelessWidget {
     required this.price,
     this.image,
     this.onTap,
+    this.meta,
   });
 
   @override
@@ -78,6 +80,10 @@ class ProductCard extends StatelessWidget {
                           .titleSmall
                           ?.copyWith(color: color.primary, fontWeight: FontWeight.w600),
                     ),
+                    if (meta != null && meta!.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(meta!, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.black.withValues(alpha: 0.6))),
+                    ],
                   ],
                 ),
               ),

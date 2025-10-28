@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers.dart';
+import '../../models/product.dart';
 import '../../widgets/product_card.dart';
 import 'product_form_screen.dart';
 import 'product_detail_screen.dart';
 import '../../utils/navigation.dart' as nav;
 import '../../utils/animations.dart';
 import '../../utils/overlays.dart';
+import '../../utils/format.dart';
 
 class ProductsScreen extends ConsumerWidget {
   final int categoryId;
@@ -81,6 +83,7 @@ class ProductsScreen extends ConsumerWidget {
                             title: p.name,
                             price: p.price,
                             image: p.image,
+                            meta: _buildProductMeta(p),
                             onTap: () async {
                               final messenger = ScaffoldMessenger.of(context);
                               final cs = Theme.of(context).colorScheme;
@@ -104,5 +107,12 @@ class ProductsScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String _buildProductMeta(Product p) {
+    final creator = p.createdByName ?? '-';
+    final updated = formatDateTime(p.updatedAt);
+    if (updated.isEmpty) return 'par $creator';
+    return 'par $creator • MAJ $updated';
   }
 }
