@@ -99,6 +99,8 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
     final color = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(widget.product == null ? 'Ajouter un produit' : 'Modifier le produit'),
         actions: [
           if (widget.product != null)
