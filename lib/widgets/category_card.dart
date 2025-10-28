@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// CategoryCard avec support des couleurs personnalisées
+// CategoryCard avec support des couleurs personnalisées et métadonnées
 class CategoryCard extends StatelessWidget {
   final String title;
   final String? image;
@@ -9,6 +9,7 @@ class CategoryCard extends StatelessWidget {
   final VoidCallback onLongPress;
   final Color? backgroundColor;
   final Color? accentColor;
+  final String? meta;
 
   const CategoryCard({
     super.key,
@@ -19,6 +20,7 @@ class CategoryCard extends StatelessWidget {
     required this.onLongPress,
     this.backgroundColor,
     this.accentColor,
+    this.meta,
   });
 
   @override
@@ -33,7 +35,7 @@ class CategoryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
-          color: colorScheme.outline,
+          color: colorScheme.outline.withOpacity(0.1),
           width: 0.2,
         ),
       ),
@@ -50,7 +52,7 @@ class CategoryCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: accent.withValues(alpha:0.1),
+                  color: accent.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -67,6 +69,7 @@ class CategoryCard extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: colorScheme.onSurface,
+                  height: 1.2,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -76,7 +79,7 @@ class CategoryCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: accent.withValues(alpha:0.1),
+                  color: accent.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -88,6 +91,20 @@ class CategoryCard extends StatelessWidget {
                   ),
                 ),
               ),
+              // Métadonnées (créateur, dates)
+              if (meta != null && meta!.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  meta!,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: colorScheme.onSurface.withOpacity(0.6),
+                    height: 1.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ],
           ),
         ),

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers.dart';
+import '../../models/product.dart';
 import '../../widgets/product_card.dart';
 import 'product_form_screen.dart';
 import 'product_detail_screen.dart';
 import '../../utils/navigation.dart' as nav;
 import '../../utils/animations.dart';
 import '../../utils/overlays.dart';
+import '../../utils/format.dart';
 
 class ProductsScreen extends ConsumerWidget {
   final int categoryId;
@@ -31,7 +33,7 @@ class ProductsScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: colorScheme.primaryContainer.withValues(alpha:0.2),
+                color: colorScheme.primaryContainer.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -62,7 +64,7 @@ class ProductsScreen extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: colorScheme.onPrimary.withValues(alpha:0.8),
+                        color: colorScheme.onPrimary.withOpacity(0.8),
                       ),
                     );
                   },
@@ -123,7 +125,7 @@ class ProductsScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.primary.withValues(alpha:0.3),
+              color: colorScheme.primary.withOpacity(0.3),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -152,12 +154,12 @@ class ProductsScreen extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: colorScheme.outline.withValues(alpha:0.1),
+          color: colorScheme.outline.withOpacity(0.1),
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha:0.05),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -168,12 +170,12 @@ class ProductsScreen extends ConsumerWidget {
         decoration: InputDecoration(
           hintText: 'Rechercher un produit...',
           hintStyle: TextStyle(
-            color: colorScheme.onSurface.withValues(alpha:0.5),
+            color: colorScheme.onSurface.withOpacity(0.5),
           ),
           prefixIcon: Container(
             margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha:0.1),
+              color: colorScheme.primary.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -220,7 +222,7 @@ class ProductsScreen extends ConsumerWidget {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: colorScheme.secondary.withValues(alpha:0.1),
+                  color: colorScheme.secondary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -261,7 +263,7 @@ class ProductsScreen extends ConsumerWidget {
               Text(
                 'Chargement des produits...',
                 style: TextStyle(
-                  color: colorScheme.onSurface.withValues(alpha:0.6),
+                  color: colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
             ],
@@ -290,7 +292,7 @@ class ProductsScreen extends ConsumerWidget {
                 'Erreur: $e',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: colorScheme.onSurface.withValues(alpha:0.6),
+                  color: colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
               const SizedBox(height: 20),
@@ -319,7 +321,7 @@ class ProductsScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha:0.05),
+                        color: Colors.black.withOpacity(0.05),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -330,6 +332,7 @@ class ProductsScreen extends ConsumerWidget {
                     title: product.name,
                     price: product.price,
                     image: product.image,
+                    meta: _buildProductMeta(product),
                     onTap: () async {
                       final messenger = ScaffoldMessenger.of(context);
                       final cs = Theme.of(context).colorScheme;
@@ -366,13 +369,13 @@ class ProductsScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(30),
             decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha:0.05),
+              color: colorScheme.primary.withOpacity(0.05),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.inventory_2_outlined,
               size: 80,
-              color: colorScheme.primary.withValues(alpha:0.3),
+              color: colorScheme.primary.withOpacity(0.3),
             ),
           ),
           const SizedBox(height: 24),
@@ -391,7 +394,7 @@ class ProductsScreen extends ConsumerWidget {
                 : 'Aucun produit ne correspond à "$searchTerm"',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: colorScheme.onSurface.withValues(alpha:0.6),
+              color: colorScheme.onSurface.withOpacity(0.6),
               height: 1.5,
             ),
           ),
@@ -434,5 +437,18 @@ class ProductsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  String _buildProductMeta(Product p) {
+    final creator = p.createdByName ?? '-';
+    final created = formatDateTime(p.createdAt);
+    final updated = formatDateTime(p.updatedAt);
+    final updBy = p.updatedByName ?? '-';
+
+    final parts = <String>['par $creator'];
+    if (created.isNotEmpty) parts.add('créé $created');
+    if (updated.isNotEmpty) parts.add('MAJ $updated par $updBy');
+
+    return parts.join(' • ');
   }
 }

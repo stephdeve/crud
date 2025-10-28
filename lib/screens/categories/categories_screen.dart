@@ -7,6 +7,8 @@ import 'category_form_screen.dart';
 import '../products/products_screen.dart';
 import '../../utils/navigation.dart' as nav;
 import '../../utils/animations.dart';
+import '../../utils/format.dart';
+import '../../models/category_with_count.dart';
 
 class CategoriesScreen extends ConsumerWidget {
   const CategoriesScreen({super.key});
@@ -56,7 +58,7 @@ class CategoriesScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: colorScheme.primaryContainer.withValues(alpha: 0.2),
+                color: colorScheme.primaryContainer.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -90,11 +92,19 @@ class CategoriesScreen extends ConsumerWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                Icons.add,
+                Icons.logout,
                 color: colorScheme.onPrimaryContainer,
                 size: 22,
               ),
             ),
+            tooltip: 'Se déconnecter',
+            onPressed: () async {
+              await ref.read(authServiceProvider).signOut();
+            },
+          ),
+
+          IconButton(
+            icon: const Icon(Icons.add),
             onPressed: () async {
               final created = await nav.push<bool>(context, const CategoryFormScreen());
               if (created == true) {
@@ -144,7 +154,7 @@ class CategoriesScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.primary.withValues(alpha: 0.3),
+              color: colorScheme.primary.withOpacity(0.3),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -192,15 +202,15 @@ class CategoriesScreen extends ConsumerWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                colorScheme.primary.withValues(alpha: 0.1),
-                colorScheme.secondary.withValues(alpha: 0.05),
+                colorScheme.primary.withOpacity(0.1),
+                colorScheme.secondary.withOpacity(0.05),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: colorScheme.outline.withValues(alpha: 0.1),
+              color: colorScheme.outline.withOpacity(0.1),
             ),
           ),
           child: Column(
@@ -210,7 +220,7 @@ class CategoriesScreen extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: colorScheme.primary.withValues(alpha: 0.1),
+                      color: colorScheme.primary.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -228,7 +238,7 @@ class CategoriesScreen extends ConsumerWidget {
                           'Votre collection',
                           style: TextStyle(
                             fontSize: 14,
-                            color: colorScheme.onSurface.withValues(alpha: 0.7),
+                            color: colorScheme.onSurface.withOpacity(0.7),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -250,10 +260,9 @@ class CategoriesScreen extends ConsumerWidget {
               const SizedBox(height: 16),
 
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical:
-                12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 decoration: BoxDecoration(
-                  color: colorScheme.primary.withValues(alpha: 0.1),
+                  color: colorScheme.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -265,8 +274,7 @@ class CategoriesScreen extends ConsumerWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      '$categoryCount catégorie${categoryCount > 1 ? 's' : ''
-                      } disponibles',
+                      '$categoryCount catégorie${categoryCount > 1 ? 's' : ''} disponibles',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -290,11 +298,11 @@ class CategoriesScreen extends ConsumerWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: colorScheme.outline.withValues(alpha: 0.1),
+              color: colorScheme.outline.withOpacity(0.1),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -305,12 +313,12 @@ class CategoriesScreen extends ConsumerWidget {
             decoration: InputDecoration(
               hintText: 'Rechercher une catégorie...',
               hintStyle: TextStyle(
-                color: colorScheme.onSurface.withValues(alpha: 0.5),
+                color: colorScheme.onSurface.withOpacity(0.5),
               ),
               prefixIcon: Container(
                 margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: colorScheme.primary.withValues(alpha: 0.1),
+                  color: colorScheme.primary.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -359,7 +367,7 @@ class CategoriesScreen extends ConsumerWidget {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: colorScheme.secondary.withValues(alpha: 0.1),
+                  color: colorScheme.secondary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -400,7 +408,7 @@ class CategoriesScreen extends ConsumerWidget {
               Text(
                 'Chargement des catégories...',
                 style: TextStyle(
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
+                  color: colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
             ],
@@ -429,7 +437,7 @@ class CategoriesScreen extends ConsumerWidget {
                 'Erreur: $e',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
+                  color: colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
               const SizedBox(height: 20),
@@ -468,12 +476,12 @@ class CategoriesScreen extends ConsumerWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-
                   ),
                   child: CategoryCard(
                     title: item.category.name,
                     image: item.category.image,
                     productCount: item.productCount,
+                    meta: _buildCategoryMeta(item),
                     backgroundColor: cardColor,
                     accentColor: accentColor,
                     onTap: () {
@@ -513,13 +521,13 @@ class CategoriesScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(30),
             decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha: 0.05),
+              color: colorScheme.primary.withOpacity(0.05),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.category_outlined,
               size: 80,
-              color: colorScheme.primary.withValues(alpha: 0.3),
+              color: colorScheme.primary.withOpacity(0.3),
             ),
           ),
           const SizedBox(height: 24),
@@ -536,7 +544,7 @@ class CategoriesScreen extends ConsumerWidget {
             'Commencez par créer votre première catégorie\npour organiser vos produits',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: colorScheme.onSurface.withValues(alpha: 0.6),
+              color: colorScheme.onSurface.withOpacity(0.6),
               height: 1.5,
             ),
           ),
@@ -564,5 +572,17 @@ class CategoriesScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  String _buildCategoryMeta(CategoryWithCount item) {
+    final c = item.category;
+    final creator = c.createdByName ?? '-';
+    final created = formatDateTime(c.createdAt);
+    final updated = formatDateTime(c.updatedAt);
+    final updBy = c.updatedByName ?? '-';
+    final parts = <String>['par $creator'];
+    if (created.isNotEmpty) parts.add('créé $created');
+    if (updated.isNotEmpty) parts.add('MAJ $updated par $updBy');
+    return parts.join(' • ');
   }
 }
