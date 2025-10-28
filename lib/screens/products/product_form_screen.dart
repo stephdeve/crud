@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../models/product.dart';
-import '../../models/category.dart';
 import '../../providers.dart';
 import '../../utils/overlays.dart';
 
@@ -92,7 +91,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                color: Theme.of(context).colorScheme.outline.withValues(alpha:0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -196,7 +195,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
         icon: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.1),
+            color: Colors.red.withValues(alpha:0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -215,7 +214,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
         content: Text(
           'Êtes-vous sûr de vouloir supprimer définitivement ce produit ? Cette action est irréversible.',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha:0.7),
           ),
           textAlign: TextAlign.center,
         ),
@@ -276,7 +275,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
     final isEditing = widget.product != null;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         foregroundColor: colorScheme.onPrimary,
         backgroundColor: colorScheme.primary,
@@ -295,7 +294,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
               icon: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.2),
+                  color: Colors.red.withValues(alpha:0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -342,7 +341,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 16),
@@ -354,12 +353,12 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: colorScheme.outline.withOpacity(0.3),
+                  color: colorScheme.outline.withValues(alpha:0.3),
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -380,7 +379,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   child: Icon(
                     Icons.photo_camera_rounded,
                     size: 48,
-                    color: colorScheme.primary.withOpacity(0.5),
+                    color: colorScheme.primary.withValues(alpha:0.5),
                   ),
                 ),
               ),
@@ -396,7 +395,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: colorScheme.primary.withOpacity(0.3),
+                      color: colorScheme.primary.withValues(alpha:0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -415,7 +414,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
         Text(
           _imagePath == null ? 'Aucune image' : 'Image sélectionnée',
           style: TextStyle(
-            color: colorScheme.onBackground.withOpacity(0.6),
+            color: colorScheme.onSurface.withValues(alpha:0.6),
             fontSize: 14,
           ),
         ),
@@ -443,7 +442,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 20),
@@ -453,7 +452,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha:0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -466,18 +465,18 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 controller: _nameCtrl,
                 decoration: InputDecoration(
                   labelText: 'Nom du produit',
-                  labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                  labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                   prefixIcon: Container(
                     margin: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: colorScheme.primary.withOpacity(0.1),
+                      color: colorScheme.primary.withValues(alpha:0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(Icons.shopping_bag_rounded, color: colorScheme.primary),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                    borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -492,18 +491,18 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 controller: _descCtrl,
                 decoration: InputDecoration(
                   labelText: 'Description',
-                  labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                  labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                   prefixIcon: Container(
                     margin: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF10B981).withOpacity(0.1),
+                      color: const Color(0xFF10B981).withValues(alpha:0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(Icons.description_rounded, color: const Color(0xFF10B981)),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                    borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -518,18 +517,18 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 controller: _priceCtrl,
                 decoration: InputDecoration(
                   labelText: 'Prix',
-                  labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                  labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                   prefixIcon: Container(
                     margin: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF59E0B).withOpacity(0.1),
+                      color: const Color(0xFFF59E0B).withValues(alpha:0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(Icons.attach_money_rounded, color: const Color(0xFFF59E0B)),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                    borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -564,7 +563,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: colorScheme.onBackground,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 16),
@@ -574,7 +573,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha:0.05),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -595,21 +594,21 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   ),
                 ),
                 data: (categories) => DropdownButtonFormField<int>(
-                  value: _selectedCategoryId,
+                  initialValue: _selectedCategoryId,
                   decoration: InputDecoration(
                     labelText: 'Sélectionner une catégorie',
-                    labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                    labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                     prefixIcon: Container(
                       margin: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: colorScheme.secondary.withOpacity(0.1),
+                        color: colorScheme.secondary.withValues(alpha:0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(Icons.category_rounded, color: colorScheme.secondary),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                      borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -728,7 +727,7 @@ class _ImageSourceOption extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+          color: Theme.of(context).colorScheme.outline.withValues(alpha:0.2),
         ),
       ),
       child: InkWell(
@@ -741,7 +740,7 @@ class _ImageSourceOption extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha:0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: color, size: 24),

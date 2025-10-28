@@ -23,12 +23,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   String? _imagePath;
   bool _saving = false;
 
-  // Couleurs pour le dégradé de l'app bar
-  final List<Color> _appBarGradientColors = [
-    const Color(0xFF6366F1),
-    const Color(0xFF8B5CF6),
-    const Color(0xFFEC4899),
-  ];
 
   @override
   void initState() {
@@ -95,7 +89,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
+                  color: const Color(0xFF6366F1).withValues(alpha:0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.photo_library, color: Color(0xFF6366F1)),
@@ -110,7 +104,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withOpacity(0.1),
+                  color: const Color(0xFF10B981).withValues(alpha:0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.camera_alt, color: Color(0xFF10B981)),
@@ -176,7 +170,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         icon: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.1),
+            color: Colors.red.withValues(alpha:0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -195,7 +189,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         content: Text(
           'Êtes-vous sûr de vouloir supprimer définitivement cette catégorie ? Cette action est irréversible.',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha:0.7),
           ),
           textAlign: TextAlign.center,
         ),
@@ -255,7 +249,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     final isEditing = widget.category != null;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: colorScheme.primary,
@@ -274,7 +268,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               icon: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.2),
+                  color: Colors.red.withValues(alpha:0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -317,7 +311,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 16),
@@ -329,12 +323,12 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: colorScheme.outline.withOpacity(0.3),
+                  color: colorScheme.outline.withValues(alpha:0.3),
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -352,8 +346,8 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        colorScheme.primary.withOpacity(0.1),
-                        colorScheme.secondary.withOpacity(0.1),
+                        colorScheme.primary.withValues(alpha:0.1),
+                        colorScheme.secondary.withValues(alpha:0.1),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -362,7 +356,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                   child: Icon(
                     Icons.category_rounded,
                     size: 48,
-                    color: colorScheme.primary.withOpacity(0.5),
+                    color: colorScheme.primary.withValues(alpha:0.5),
                   ),
                 ),
               ),
@@ -378,7 +372,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: colorScheme.primary.withOpacity(0.3),
+                      color: colorScheme.primary.withValues(alpha:0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -397,7 +391,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         Text(
           _imagePath == null ? 'Aucune image' : 'Image sélectionnée',
           style: TextStyle(
-            color: colorScheme.onBackground.withOpacity(0.6),
+            color: colorScheme.onSurface.withValues(alpha:0.6),
             fontSize: 14,
           ),
         ),
@@ -425,7 +419,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 20),
@@ -435,7 +429,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha:0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -448,18 +442,18 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 controller: _nameCtrl,
                 decoration: InputDecoration(
                   labelText: 'Nom de la catégorie',
-                  labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                  labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                   prefixIcon: Container(
                     margin: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: colorScheme.primary.withOpacity(0.1),
+                      color: colorScheme.primary.withValues(alpha:0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(Icons.category_rounded, color: colorScheme.primary),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                    borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -474,18 +468,18 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 controller: _descCtrl,
                 decoration: InputDecoration(
                   labelText: 'Description (optionnel)',
-                  labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                  labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                   prefixIcon: Container(
                     margin: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF10B981).withOpacity(0.1),
+                      color: const Color(0xFF10B981).withValues(alpha:0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(Icons.description_rounded, color: const Color(0xFF10B981)),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                    borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -520,7 +514,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: colorScheme.primary.withOpacity(0.3),
+                  color: colorScheme.primary.withValues(alpha:0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
