@@ -17,6 +17,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   bool _loading = false;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -35,10 +36,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     try {
       final auth = ref.read(authServiceProvider);
       await auth.signUp(name: _nameCtrl.text.trim(), email: _emailCtrl.text.trim(), password: _passCtrl.text);
-      messenger.showSnackBar(buildAppSnack(cs, 'Compte créé', type: SnackType.success));
+      messenger.showSnackBar(buildAppSnack(cs, '✅ Compte créé avec succès', type: SnackType.success));
       if (navigator.canPop()) navigator.pop();
     } catch (e) {
-      messenger.showSnackBar(buildAppSnack(cs, 'Erreur: $e', type: SnackType.error));
+      messenger.showSnackBar(buildAppSnack(cs, '❌ Erreur: $e', type: SnackType.error));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -46,48 +47,297 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Créer un compte')),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 460),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
+      backgroundColor: colorScheme.background,
+      appBar: AppBar(
+        foregroundColor: colorScheme.onPrimary,
+        backgroundColor: colorScheme.primary,
+        elevation: 0,
+        title: const Text('Créer un compte'),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    controller: _nameCtrl,
-                    decoration: const InputDecoration(labelText: 'Nom'),
-                    validator: (v) => v == null || v.isEmpty ? 'Nom requis' : null,
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _emailCtrl,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (v) => v == null || v.isEmpty ? 'Email requis' : null,
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _passCtrl,
-                    decoration: const InputDecoration(labelText: 'Mot de passe'),
-                    obscureText: true,
-                    validator: (v) => v == null || v.isEmpty ? 'Mot de passe requis' : null,
-                  ),
-                  const SizedBox(height: 20),
-                  FilledButton(
-                    onPressed: _loading ? null : _submit,
-                    child: Text(_loading ? 'Création...' : 'Créer'),
-                  ),
+                  // Header
+                  _buildHeader(colorScheme),
+                  const SizedBox(height: 32),
+
+                  // Formulaire d'inscription
+                  _buildSignUpForm(colorScheme),
+                  const SizedBox(height: 24),
+
+                  // Lien vers connexion
+                  _buildSignInLink(context),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHeader(ColorScheme colorScheme) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.person_add_rounded,
+            size: 48,
+            color: colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Créer un compte',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            color: colorScheme.onBackground,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Rejoignez notre plateforme',
+          style: TextStyle(
+            fontSize: 16,
+            color: colorScheme.onBackground.withOpacity(0.6),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignUpForm(ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            // Champ nom
+            TextFormField(
+              controller: _nameCtrl,
+              decoration: InputDecoration(
+                labelText: 'Nom complet',
+                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                prefixIcon: Container(
+                  margin: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.person_rounded,
+                    color: const Color(0xFF10B981),
+                    size: 20,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: const Color(0xFF10B981), width: 2),
+                ),
+              ),
+              style: TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500),
+              validator: (v) => v == null || v.isEmpty ? 'Le nom est requis' : null,
+            ),
+            const SizedBox(height: 16),
+
+            // Champ email
+            TextFormField(
+              controller: _emailCtrl,
+              decoration: InputDecoration(
+                labelText: 'Adresse email',
+                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                prefixIcon: Container(
+                  margin: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.email_rounded,
+                    color: colorScheme.primary,
+                    size: 20,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                ),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              style: TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500),
+              validator: (v) {
+                if (v == null || v.isEmpty) return 'L\'email est requis';
+                if (!v.contains('@')) return 'Format d\'email invalide';
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Champ mot de passe
+            TextFormField(
+              controller: _passCtrl,
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
+                labelText: 'Mot de passe',
+                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                prefixIcon: Container(
+                  margin: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B).withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.lock_rounded,
+                    color: const Color(0xFFF59E0B),
+                    size: 20,
+                  ),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_rounded : Icons.visibility_off_rounded,
+                    color: colorScheme.onSurface.withOpacity(0.5),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: const Color(0xFFF59E0B), width: 2),
+                ),
+              ),
+              style: TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500),
+              validator: (v) {
+                if (v == null || v.isEmpty) return 'Le mot de passe est requis';
+                if (v.length < 6) return 'Le mot de passe doit contenir au moins 6 caractères';
+                return null;
+              },
+            ),
+            const SizedBox(height: 24),
+
+            // Bouton d'inscription
+            FilledButton(
+              onPressed: _loading ? null : _submit,
+              style: FilledButton.styleFrom(
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
+                minimumSize: const Size(double.infinity, 56),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              ),
+              child: _loading
+                  ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: colorScheme.onPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Création...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onPrimary,
+                    ),
+                  ),
+                ],
+              )
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.person_add_rounded, size: 20),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Créer mon compte',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignInLink(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Déjà un compte ? ',
+          style: TextStyle(
+            color: colorScheme.onBackground.withOpacity(0.6),
+          ),
+        ),
+        GestureDetector(
+          onTap: _loading
+              ? null
+              : () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            'Se connecter',
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.w600,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

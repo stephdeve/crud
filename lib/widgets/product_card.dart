@@ -23,84 +23,144 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Ink(
-        decoration: BoxDecoration(
-          color: color.surface,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            )
-          ],
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      color: colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: colorScheme.outline.withOpacity(0.1),
+          width: 0.2,
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Hero(
-                tag: 'product-image-${id ?? title}',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    width: 84,
-                    height: 84,
-                    color: color.primary.withValues(alpha: 0.06),
-                    child: _buildImage(color),
-                  ),
-                ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image du produit
+              _buildImageSection(colorScheme, context),
+              const SizedBox(width: 16),
+
+              // Informations du produit (nom + prix + meta en colonne)
+              Expanded(
+                child: _buildInfoSection(colorScheme, context),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      formatPrice(price),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(color: color.primary, fontWeight: FontWeight.w600),
-                    ),
-                    if (meta != null && meta!.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      Text(meta!, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.black.withValues(alpha: 0.6))),
-                    ],
-                  ],
-                ),
-              ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildImage(ColorScheme color) {
-    if (image != null && image!.isNotEmpty) {
-      return Image.file(
-        File(image!),
-        fit: BoxFit.cover,
-      );
-    }
-    return Center(child: Icon(Icons.image_outlined, color: color.primary));
+  Widget _buildImageSection(ColorScheme colorScheme, BuildContext context) {
+    return Hero(
+      tag: 'product-image-${id ?? title}',
+      child: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: colorScheme.primary.withOpacity(0.05),
+          border: Border.all(
+            color: colorScheme.outline.withOpacity(0.1),
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: image != null && image!.isNotEmpty
+              ? Image.file(
+            File(image!),
+            fit: BoxFit.cover,
+            width: 80,
+            height: 80,
+            errorBuilder: (context, error, stackTrace) {
+              return _buildPlaceholderIcon(colorScheme);
+            },
+          )
+              : _buildPlaceholderIcon(colorScheme),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(ColorScheme colorScheme, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: colorScheme.onSurface,
+            height: 1.3,
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            formatPrice(price),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.primary,
+            ),
+          ),
+        ),
+        // Métadonnées (créateur, dates)
+        if (meta != null && meta!.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            meta!,
+            style: TextStyle(
+              fontSize: 10,
+              color: colorScheme.onSurface.withOpacity(0.6),
+              height: 1.3,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildPlaceholderIcon(ColorScheme colorScheme) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.shopping_bag_rounded,
+            size: 24,
+            color: colorScheme.primary.withOpacity(0.3),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Image',
+            style: TextStyle(
+              fontSize: 9,
+              color: colorScheme.primary.withOpacity(0.3),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
