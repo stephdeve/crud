@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:crud/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../models/category.dart';
-import '../../providers.dart';
+
 import '../../utils/overlays.dart';
 
 class CategoryFormScreen extends ConsumerStatefulWidget {
@@ -83,6 +84,8 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     final color = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(widget.category == null ? 'Ajouter une catégorie' : 'Modifier la catégorie'),
         actions: [
           if (widget.category != null)

@@ -19,6 +19,8 @@ class ProductsScreen extends ConsumerWidget {
     final asyncProducts = ref.watch(productsByCategoryProvider(categoryId));
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(categoryName),
         actions: [
           IconButton(
