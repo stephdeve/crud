@@ -43,7 +43,7 @@ class ProductService {
       FROM products pr
       LEFT JOIN users uc ON uc.id = pr.created_by
       LEFT JOIN users uu ON uu.id = pr.updated_by
-      ${whereClauses.isEmpty ? '' : 'WHERE ' + whereClauses.join(' AND ')}
+      ${whereClauses.isEmpty ? '' : 'WHERE ${whereClauses.join(' AND ')}'}
       ORDER BY pr.name ASC
     ''', whereArgs.isEmpty ? [] : whereArgs);
     return rows.map((e) => Product.fromMap(e)).toList();
