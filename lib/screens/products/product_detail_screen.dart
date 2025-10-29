@@ -21,7 +21,7 @@ class ProductDetailScreen extends ConsumerWidget {
 
     return asyncProduct.when(
       loading: () => Scaffold(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +31,7 @@ class ProductDetailScreen extends ConsumerWidget {
               Text(
                 'Chargement du produit...',
                 style: TextStyle(
-                  color: colorScheme.onBackground.withOpacity(0.6),
+                  color: colorScheme.onSurface.withValues(alpha:0.6),
                 ),
               ),
             ],
@@ -39,7 +39,7 @@ class ProductDetailScreen extends ConsumerWidget {
         ),
       ),
       error: (e, _) => Scaffold(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
           foregroundColor: colorScheme.onPrimary,
           backgroundColor: colorScheme.primary,
@@ -60,7 +60,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: colorScheme.onBackground,
+                  color: colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 8),
@@ -68,7 +68,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 'Erreur: $e',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: colorScheme.onBackground.withOpacity(0.6),
+                  color: colorScheme.onSurface.withValues(alpha:0.6),
                 ),
               ),
               const SizedBox(height: 20),
@@ -85,7 +85,7 @@ class ProductDetailScreen extends ConsumerWidget {
       data: (p) {
         if (p == null) {
           return Scaffold(
-            backgroundColor: colorScheme.background,
+            backgroundColor: colorScheme.surface,
             appBar: AppBar(
               foregroundColor: colorScheme.onPrimary,
               backgroundColor: colorScheme.primary,
@@ -98,7 +98,7 @@ class ProductDetailScreen extends ConsumerWidget {
                   Icon(
                     Icons.inventory_2_outlined,
                     size: 64,
-                    color: colorScheme.onBackground.withOpacity(0.3),
+                    color: colorScheme.onSurface.withValues(alpha:0.3),
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -106,7 +106,7 @@ class ProductDetailScreen extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: colorScheme.onBackground,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -114,7 +114,7 @@ class ProductDetailScreen extends ConsumerWidget {
                     'Le produit que vous recherchez n\'existe pas ou a été supprimé',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: colorScheme.onBackground.withOpacity(0.6),
+                      color: colorScheme.onSurface.withValues(alpha:0.6),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -129,7 +129,7 @@ class ProductDetailScreen extends ConsumerWidget {
         }
 
         return Scaffold(
-          backgroundColor: colorScheme.background,
+          backgroundColor: colorScheme.surface,
           appBar: AppBar(
             foregroundColor: colorScheme.onPrimary,
             backgroundColor: colorScheme.primary,
@@ -171,7 +171,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 icon: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.2),
+                    color: Colors.red.withValues(alpha:0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -219,7 +219,7 @@ class ProductDetailScreen extends ConsumerWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha:0.1),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -244,20 +244,20 @@ class ProductDetailScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.1),
+                    color: colorScheme.primary.withValues(alpha:0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.inventory_2_outlined,
                     size: 48,
-                    color: colorScheme.primary.withOpacity(0.5),
+                    color: colorScheme.primary.withValues(alpha:0.5),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   'Aucune image',
                   style: TextStyle(
-                    color: colorScheme.onSurface.withOpacity(0.5),
+                    color: colorScheme.onSurface.withValues(alpha:0.5),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -282,7 +282,7 @@ class ProductDetailScreen extends ConsumerWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha:0.05),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -303,7 +303,7 @@ class ProductDetailScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
-                              color: colorScheme.onBackground,
+                              color: colorScheme.onSurface,
                               height: 1.2,
                             ),
                           ),
@@ -311,7 +311,7 @@ class ProductDetailScreen extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: colorScheme.primary.withOpacity(0.1),
+                              color: colorScheme.primary.withValues(alpha:0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -329,7 +329,7 @@ class ProductDetailScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: colorScheme.secondary.withOpacity(0.1),
+                        color: colorScheme.secondary.withValues(alpha:0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -382,7 +382,7 @@ class ProductDetailScreen extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: colorScheme.onBackground,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
@@ -394,7 +394,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha:0.05),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -418,7 +418,7 @@ class ProductDetailScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: colorScheme.onBackground,
+              color: colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 12),
@@ -429,7 +429,7 @@ class ProductDetailScreen extends ConsumerWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha:0.05),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -465,7 +465,7 @@ class ProductDetailScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha:0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -483,7 +483,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 label,
                 style: TextStyle(
                   fontSize: 12,
-                  color: colorScheme.onSurface.withOpacity(0.6),
+                  color: colorScheme.onSurface.withValues(alpha:0.6),
                 ),
               ),
               Text(
@@ -532,7 +532,7 @@ class ProductDetailScreen extends ConsumerWidget {
         icon: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.1),
+            color: Colors.red.withValues(alpha:0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -551,7 +551,7 @@ class ProductDetailScreen extends ConsumerWidget {
         content: Text(
           'Êtes-vous sûr de vouloir supprimer définitivement "${p.name}" ? Cette action est irréversible.',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha:0.7),
           ),
           textAlign: TextAlign.center,
         ),
@@ -632,7 +632,7 @@ class _InfoItem extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha:0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -647,7 +647,7 @@ class _InfoItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: colorScheme.onSurface.withOpacity(0.6),
+                  color: colorScheme.onSurface.withValues(alpha:0.6),
                 ),
               ),
             ],

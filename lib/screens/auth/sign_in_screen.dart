@@ -47,7 +47,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -82,7 +82,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: colorScheme.primary.withOpacity(0.1),
+            color: colorScheme.primary.withValues(alpha:0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -97,7 +97,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w700,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 8),
@@ -105,7 +105,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           'Connectez-vous à votre compte',
           style: TextStyle(
             fontSize: 16,
-            color: colorScheme.onBackground.withOpacity(0.6),
+            color: colorScheme.onSurface.withValues(alpha:0.6),
           ),
         ),
       ],
@@ -120,7 +120,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -135,11 +135,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               controller: _emailCtrl,
               decoration: InputDecoration(
                 labelText: 'Adresse email',
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                 prefixIcon: Container(
                   margin: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.1),
+                    color: colorScheme.primary.withValues(alpha:0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -150,7 +150,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                  borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -173,11 +173,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               obscureText: _obscurePassword,
               decoration: InputDecoration(
                 labelText: 'Mot de passe',
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                 prefixIcon: Container(
                   margin: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.1),
+                    color: colorScheme.primary.withValues(alpha:0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -189,7 +189,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscurePassword ? Icons.visibility_rounded : Icons.visibility_off_rounded,
-                    color: colorScheme.onSurface.withOpacity(0.5),
+                    color: colorScheme.onSurface.withValues(alpha:0.5),
                   ),
                   onPressed: () {
                     setState(() {
@@ -199,7 +199,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                  borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -274,7 +274,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         Text(
           'Nouveau ici ? ',
           style: TextStyle(
-            color: colorScheme.onBackground.withOpacity(0.6),
+            color: colorScheme.onSurface.withValues(alpha:0.6),
           ),
         ),
         GestureDetector(

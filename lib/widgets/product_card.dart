@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: colorScheme.outline.withOpacity(0.1),
+          color: colorScheme.outline.withValues(alpha:0.1),
           width: 0.2,
         ),
       ),
@@ -67,9 +67,9 @@ class ProductCard extends StatelessWidget {
         height: 80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: colorScheme.primary.withOpacity(0.05),
+          color: colorScheme.primary.withValues(alpha:0.05),
           border: Border.all(
-            color: colorScheme.outline.withOpacity(0.1),
+            color: colorScheme.outline.withValues(alpha:0.1),
           ),
         ),
         child: ClipRRect(
@@ -110,7 +110,7 @@ class ProductCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: colorScheme.primary.withOpacity(0.1),
+            color: colorScheme.primary.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -129,7 +129,7 @@ class ProductCard extends StatelessWidget {
             meta!,
             style: TextStyle(
               fontSize: 10,
-              color: colorScheme.onSurface.withOpacity(0.6),
+              color: colorScheme.onSurface.withValues(alpha:0.6),
               height: 1.3,
             ),
             maxLines: 2,
@@ -148,14 +148,14 @@ class ProductCard extends StatelessWidget {
           Icon(
             Icons.shopping_bag_rounded,
             size: 24,
-            color: colorScheme.primary.withOpacity(0.3),
+            color: colorScheme.primary.withValues(alpha:0.3),
           ),
           const SizedBox(height: 4),
           Text(
             'Image',
             style: TextStyle(
               fontSize: 9,
-              color: colorScheme.primary.withOpacity(0.3),
+              color: colorScheme.primary.withValues(alpha:0.3),
               fontWeight: FontWeight.w500,
             ),
           ),

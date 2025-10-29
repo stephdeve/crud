@@ -50,7 +50,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         foregroundColor: colorScheme.onPrimary,
         backgroundColor: colorScheme.primary,
@@ -91,7 +91,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: colorScheme.primary.withOpacity(0.1),
+            color: colorScheme.primary.withValues(alpha:0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -106,7 +106,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w700,
-            color: colorScheme.onBackground,
+            color: colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 8),
@@ -114,7 +114,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           'Rejoignez notre plateforme',
           style: TextStyle(
             fontSize: 16,
-            color: colorScheme.onBackground.withOpacity(0.6),
+            color: colorScheme.onSurface.withValues(alpha:0.6),
           ),
         ),
       ],
@@ -129,7 +129,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -144,11 +144,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               controller: _nameCtrl,
               decoration: InputDecoration(
                 labelText: 'Nom complet',
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                 prefixIcon: Container(
                   margin: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    color: const Color(0xFF10B981).withValues(alpha:0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -159,7 +159,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                  borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -176,11 +176,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               controller: _emailCtrl,
               decoration: InputDecoration(
                 labelText: 'Adresse email',
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                 prefixIcon: Container(
                   margin: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.1),
+                    color: colorScheme.primary.withValues(alpha:0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -191,7 +191,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                  borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -214,11 +214,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               obscureText: _obscurePassword,
               decoration: InputDecoration(
                 labelText: 'Mot de passe',
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                labelStyle: TextStyle(color: colorScheme.onSurface.withValues(alpha:0.7)),
                 prefixIcon: Container(
                   margin: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF59E0B).withOpacity(0.1),
+                    color: const Color(0xFFF59E0B).withValues(alpha:0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -230,7 +230,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscurePassword ? Icons.visibility_rounded : Icons.visibility_off_rounded,
-                    color: colorScheme.onSurface.withOpacity(0.5),
+                    color: colorScheme.onSurface.withValues(alpha:0.5),
                   ),
                   onPressed: () {
                     setState(() {
@@ -240,7 +240,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                  borderSide: BorderSide(color: colorScheme.outline.withValues(alpha:0.3)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -319,7 +319,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         Text(
           'Déjà un compte ? ',
           style: TextStyle(
-            color: colorScheme.onBackground.withOpacity(0.6),
+            color: colorScheme.onSurface.withValues(alpha:0.6),
           ),
         ),
         GestureDetector(
